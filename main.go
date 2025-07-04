@@ -13,33 +13,24 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		wd, err := os.Getwd()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
+		sendToStdErr(err)
 
 		dirs := strings.Split(wd, "/")
-
 		curDir := dirs[len(dirs)-1]
 
 		host, err := os.Hostname()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
+		sendToStdErr(err)
 
 		user, err := user.Current()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
+		sendToStdErr(err)
 
 		fmt.Printf("[%s@%s %s]> ", user.Username, host, curDir)
 
 		input, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
+		sendToStdErr(err)
 
 		if err = execInput(input); err != nil {
-			fmt.Fprintln(os.Stderr, err)
+			sendToStdErr(err)
 		}
 	}
 }
@@ -105,4 +96,8 @@ func handleCD(args []string) error {
 	lastCDedDir = wd
 
 	return os.Chdir(args[1])
+}
+
+func sendToStdErr(err error) {
+	fmt.Fprintln(os.Stderr, err)
 }
