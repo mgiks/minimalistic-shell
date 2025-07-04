@@ -25,6 +25,8 @@ func main() {
 	}
 }
 
+var lastCDedDir string
+
 func execInput(input string) error {
 	input = strings.TrimSuffix(input, "\n")
 
@@ -35,6 +37,17 @@ func execInput(input string) error {
 		if len(args) < 2 {
 			return errors.New("path required")
 		}
+
+		if args[1] == "-" {
+			return os.Chdir(lastCDedDir)
+		}
+
+		wd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+
+		lastCDedDir = wd
 
 		return os.Chdir(args[1])
 	case "exit":
