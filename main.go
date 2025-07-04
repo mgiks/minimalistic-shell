@@ -5,13 +5,33 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
 	"strings"
 )
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	for {
-		fmt.Print("> ")
+		wd, err := os.Getwd()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+
+		dirs := strings.Split(wd, "/")
+
+		curDir := dirs[len(dirs)-1]
+
+		host, err := os.Hostname()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+
+		user, err := user.Current()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+
+		fmt.Printf("[%s@%s %s]> ", user.Username, host, curDir)
 
 		input, err := reader.ReadString('\n')
 		if err != nil {
