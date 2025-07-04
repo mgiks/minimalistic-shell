@@ -54,7 +54,6 @@ func handleCD(args []string) error {
 		}
 
 		lastCDedDir = wd
-		fmt.Println(lastCDedDir)
 
 		homeDir, err := os.UserHomeDir()
 		if err != nil {
@@ -74,6 +73,7 @@ func handleCD(args []string) error {
 
 		lastCDedDir = wd
 
+		fmt.Println(dirToCD)
 		return os.Chdir(dirToCD)
 	}
 
