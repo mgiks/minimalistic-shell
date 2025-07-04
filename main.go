@@ -59,12 +59,7 @@ var lastCDedDir string
 
 func handleCD(args []string) error {
 	if len(args) < 2 {
-		wd, err := os.Getwd()
-		if err != nil {
-			return err
-		}
-
-		lastCDedDir = wd
+		updateLastCDedDir()
 
 		homeDir, err := os.UserHomeDir()
 		if err != nil {
@@ -77,25 +72,24 @@ func handleCD(args []string) error {
 	if args[1] == "-" {
 		dirToCD := lastCDedDir
 
-		wd, err := os.Getwd()
-		if err != nil {
-			return err
-		}
-
-		lastCDedDir = wd
+		updateLastCDedDir()
 
 		fmt.Println(dirToCD)
 		return os.Chdir(dirToCD)
 	}
 
+	updateLastCDedDir()
+
+	return os.Chdir(args[1])
+}
+
+func updateLastCDedDir() {
 	wd, err := os.Getwd()
 	if err != nil {
-		return err
+		sendToStdErr(err)
 	}
 
 	lastCDedDir = wd
-
-	return os.Chdir(args[1])
 }
 
 func sendToStdErr(err error) {
