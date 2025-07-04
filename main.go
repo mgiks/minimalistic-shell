@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -35,11 +34,33 @@ func execInput(input string) error {
 	switch args[0] {
 	case "cd":
 		if len(args) < 2 {
-			return errors.New("path required")
+			wd, err := os.Getwd()
+			if err != nil {
+				return err
+			}
+
+			lastCDedDir = wd
+			fmt.Println(lastCDedDir)
+
+			homeDir, err := os.UserHomeDir()
+			if err != nil {
+				return err
+			}
+
+			return os.Chdir(homeDir)
 		}
 
 		if args[1] == "-" {
-			return os.Chdir(lastCDedDir)
+			dirToCD := lastCDedDir
+
+			wd, err := os.Getwd()
+			if err != nil {
+				return err
+			}
+
+			lastCDedDir = wd
+
+			return os.Chdir(dirToCD)
 		}
 
 		wd, err := os.Getwd()
