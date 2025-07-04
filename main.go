@@ -56,7 +56,7 @@ func execInput(input string) error {
 	return cmd.Run()
 }
 
-var lastCDedDir string
+var prevWorkingDir string
 
 func handleCD(args []string) error {
 	if len(args) < 2 {
@@ -71,11 +71,11 @@ func handleCD(args []string) error {
 	}
 
 	if args[1] == "-" {
-		if len(lastCDedDir) == 0 {
+		if len(prevWorkingDir) == 0 {
 			return errors.New("previous working directory not set")
 		}
 
-		dirToCD := lastCDedDir
+		dirToCD := prevWorkingDir
 
 		updateLastCDedDir()
 
@@ -94,7 +94,7 @@ func updateLastCDedDir() {
 		handleErr(err)
 	}
 
-	lastCDedDir = wd
+	prevWorkingDir = wd
 }
 
 func handleErr(err error) {
