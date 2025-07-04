@@ -36,10 +36,14 @@ func main() {
 	}
 }
 
+var cmdHistory = make([]string, 0)
+
 func execInput(input string) error {
 	input = strings.TrimSuffix(input, "\n")
 
 	args := strings.Split(input, " ")
+
+	cmdHistory = append(cmdHistory, strings.Join(args, " "))
 
 	switch args[0] {
 	case "cd":
