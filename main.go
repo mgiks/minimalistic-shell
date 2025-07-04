@@ -24,8 +24,6 @@ func main() {
 	}
 }
 
-var lastCDedDir string
-
 func execInput(input string) error {
 	input = strings.TrimSuffix(input, "\n")
 
@@ -33,44 +31,7 @@ func execInput(input string) error {
 
 	switch args[0] {
 	case "cd":
-		if len(args) < 2 {
-			wd, err := os.Getwd()
-			if err != nil {
-				return err
-			}
-
-			lastCDedDir = wd
-			fmt.Println(lastCDedDir)
-
-			homeDir, err := os.UserHomeDir()
-			if err != nil {
-				return err
-			}
-
-			return os.Chdir(homeDir)
-		}
-
-		if args[1] == "-" {
-			dirToCD := lastCDedDir
-
-			wd, err := os.Getwd()
-			if err != nil {
-				return err
-			}
-
-			lastCDedDir = wd
-
-			return os.Chdir(dirToCD)
-		}
-
-		wd, err := os.Getwd()
-		if err != nil {
-			return err
-		}
-
-		lastCDedDir = wd
-
-		return os.Chdir(args[1])
+		return handleCD(args)
 	case "exit":
 		os.Exit(0)
 	}
@@ -81,4 +42,47 @@ func execInput(input string) error {
 	cmd.Stdout = os.Stdout
 
 	return cmd.Run()
+}
+
+var lastCDedDir string
+
+func handleCD(args []string) error {
+	if len(args) < 2 {
+		wd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+
+		lastCDedDir = wd
+		fmt.Println(lastCDedDir)
+
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			return err
+		}
+
+		return os.Chdir(homeDir)
+	}
+
+	if args[1] == "-" {
+		dirToCD := lastCDedDir
+
+		wd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+
+		lastCDedDir = wd
+
+		return os.Chdir(dirToCD)
+	}
+
+	wd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+
+	lastCDedDir = wd
+
+	return os.Chdir(args[1])
 }
