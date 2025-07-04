@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -70,6 +71,10 @@ func handleCD(args []string) error {
 	}
 
 	if args[1] == "-" {
+		if len(lastCDedDir) == 0 {
+			return errors.New("previous working directory not set")
+		}
+
 		dirToCD := lastCDedDir
 
 		updateLastCDedDir()
