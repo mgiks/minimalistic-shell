@@ -64,7 +64,7 @@ var prevWorkingDir string
 
 func handleCD(args []string) error {
 	if len(args) < 2 {
-		updateLastCDedDir()
+		updateLastWorkingDir()
 
 		homeDir, err := os.UserHomeDir()
 		if err != nil {
@@ -81,18 +81,18 @@ func handleCD(args []string) error {
 
 		dirToCD := prevWorkingDir
 
-		updateLastCDedDir()
+		updateLastWorkingDir()
 
 		fmt.Println(dirToCD)
 		return os.Chdir(dirToCD)
 	}
 
-	updateLastCDedDir()
+	updateLastWorkingDir()
 
 	return os.Chdir(args[1])
 }
 
-func updateLastCDedDir() {
+func updateLastWorkingDir() {
 	wd, err := os.Getwd()
 	if err != nil {
 		handleErr(err)
